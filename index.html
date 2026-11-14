@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard | Aceros al Carbono</title>
-  <meta name="description" content="Análisis interactivo de propiedades mecánicas de aceros al carbono: %C, UTS, YS y tratamientos térmicos.">
+  <meta name="description"
+    content="Análisis interactivo de propiedades mecánicas de aceros al carbono: %C, UTS, YS y tratamientos térmicos.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 </head>
+
 <body>
   <canvas id="bg"></canvas>
-  <div class="glow a"></div><div class="glow b"></div>
+  <div class="glow a"></div>
+  <div class="glow b"></div>
 
   <nav>
     <div class="logo"><i></i>Fe–C Analytics</div>
@@ -28,21 +32,42 @@
     <header class="hero">
       <span class="badge">Proyecto 2 · Ingeniería de Materiales</span>
       <h1>Propiedades mecánicas de <span>aceros al carbono</span></h1>
-      <p>Explora cómo el contenido de carbono y el tratamiento térmico modifican la resistencia del acero a través de su microestructura.</p>
+      <p>Explora cómo el contenido de carbono y el tratamiento térmico modifican la resistencia del acero a través de su
+        microestructura.</p>
     </header>
 
     <section id="kpi" class="rv">
       <div class="grid kpis">
-        <div class="card kpi" style="--c:var(--sky)"><h3>Registros válidos</h3><div class="v"><span data-to="188">0</span></div><small class="sub">tras limpieza de datos</small></div>
-        <div class="card kpi" style="--c:var(--indigo)"><h3>Correlación %C vs UTS</h3><div class="v">~ <span data-to="0.50" data-dec="2">0</span></div><small class="sub">positiva, moderada</small></div>
-        <div class="card kpi" style="--c:var(--emerald)"><h3>YS prom. normalizado</h3><div class="v"><span data-to="546">0</span><small>MPa</small></div><small class="sub">enfriamiento al aire</small></div>
-        <div class="card kpi" style="--c:var(--rose)"><h3>YS prom. recocido</h3><div class="v"><span data-to="476">0</span><small>MPa</small></div><small class="sub">enfriamiento en horno</small></div>
-        <div class="card kpi" style="--c:var(--amber)"><h3>ANOVA (valor p)</h3><div class="v"><span data-to="0.0013" data-dec="4">0</span></div><small class="sub">diferencia significativa</small></div>
+        <div class="card kpi" style="--c:var(--sky)">
+          <h3>Registros válidos</h3>
+          <div class="v"><span data-to="188">0</span></div><small class="sub">tras limpieza de datos</small>
+        </div>
+        <div class="card kpi" style="--c:var(--indigo)">
+          <h3>Correlación %C vs UTS</h3>
+          <div class="v">~ <span data-to="0.50" data-dec="2">0</span></div><small class="sub">positiva, moderada</small>
+        </div>
+        <div class="card kpi" style="--c:var(--emerald)">
+          <h3>YS prom. normalizado</h3>
+          <div class="v"><span data-to="546">0</span><small>MPa</small></div><small class="sub">enfriamiento al
+            aire</small>
+        </div>
+        <div class="card kpi" style="--c:var(--rose)">
+          <h3>YS prom. recocido</h3>
+          <div class="v"><span data-to="476">0</span><small>MPa</small></div><small class="sub">enfriamiento en
+            horno</small>
+        </div>
+        <div class="card kpi" style="--c:var(--amber)">
+          <h3>ANOVA (valor p)</h3>
+          <div class="v"><span data-to="0.0013" data-dec="4">0</span></div><small class="sub">diferencia
+            significativa</small>
+        </div>
       </div>
     </section>
 
     <section id="graficos" class="rv">
-      <div class="sec-title"><h2>Exploración interactiva</h2></div>
+      <div class="sec-title">
+        <h2>Exploración interactiva</h2>
+      </div>
       <div class="grid two">
         <div class="card">
           <div class="card-head">
@@ -72,9 +97,11 @@
         <div class="card">
           <h3 class="t">¿Por qué normalizado &gt; recocido?</h3>
           <p class="d">Efecto de la velocidad de enfriamiento</p>
-          <p style="color:#c3cee0">El enfriamiento más rápido al aire genera <b>perlita fina</b>, con menor distancia interlaminar entre ferrita y cementita (Fe₃C). Menos espacio libre para que las dislocaciones se muevan implica <b>mayor resistencia</b> aunque haya menos carbono.</p>
-          <p style="color:#c3cee0;margin-top:12px">El recocido (enfriamiento en horno) forma perlita gruesa y es más blando y dúctil.</p>
-          <p style="color:#c3cee0;margin-top:12px">Esto se explica con la relación de Hall-Petch: las láminas de cementita actúan como barreras para las dislocaciones, y cuanto más finas y cercanas están, más energía se necesita para deformar el material. Además, al enfriar más rápido la transformación ocurre a menor temperatura, lo que refina la estructura.</p>
+          <p style="color:#c3cee0">El enfriamiento más rápido al aire genera <b>perlita fina</b>, con menor distancia
+            interlaminar entre ferrita y cementita (Fe₃C). Menos espacio libre para que las dislocaciones se muevan
+            implica <b>mayor resistencia</b> aunque haya menos carbono.</p>
+          <p style="color:#c3cee0;margin-top:12px">El recocido (enfriamiento en horno) forma perlita gruesa y es más
+            blando y dúctil.</p>
           <ul class="mini">
             <li><b>Recocido:</b> enfriamiento lento en horno → perlita gruesa → menor UTS y YS, mayor ductilidad.</li>
             <li><b>Normalizado:</b> enfriamiento al aire → perlita fina → mayor UTS y YS.</li>
@@ -85,22 +112,31 @@
     </section>
 
     <section id="estimador" class="rv">
-      <div class="sec-title"><h2>Propuesta propia · Estimador de UTS</h2></div>
+      <div class="sec-title">
+        <h2>Propuesta propia · Estimador de UTS</h2>
+      </div>
       <div class="card est">
         <div class="ctrl">
           <label>Tratamiento / proceso</label>
           <select id="proc"></select>
           <label>Contenido de carbono <b id="cv"></b></label>
           <input type="range" id="carb" class="slider" min="0.05" max="1" step="0.01" value="0.4">
-          <div class="ticks"><span>0.05</span><span>0.25</span><span>0.5</span><span>0.77 (eutectoide)</span><span>1.0</span></div>
+          <div class="ticks"><span>0.05</span><span>0.25</span><span>0.5</span><span>0.77
+              (eutectoide)</span><span>1.0</span></div>
           <p class="mat" id="mat"></p>
           <p class="note" id="estNote"></p>
         </div>
         <div class="result">
           <div class="gauge">
             <svg width="220" height="220" viewBox="0 0 220 220">
-              <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#34d399"/></linearGradient></defs>
-              <circle class="bgc" cx="110" cy="110" r="90"/><circle class="fg" cx="110" cy="110" r="90"/>
+              <defs>
+                <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#38bdf8" />
+                  <stop offset="1" stop-color="#34d399" />
+                </linearGradient>
+              </defs>
+              <circle class="bgc" cx="110" cy="110" r="90" />
+              <circle class="fg" cx="110" cy="110" r="90" />
             </svg>
             <div class="num"><b id="utsOut">0</b><span>MPa · UTS estimado</span></div>
           </div>
@@ -108,14 +144,19 @@
       </div>
       <div class="card" style="margin-top:18px">
         <h3 class="t">Diagrama de fases Fe–Fe₃C (esquemático)</h3>
-        <p class="d">La línea vertical sigue el %C del deslizador. Observa en qué campo cae y qué microestructura resulta al enfriar lentamente.</p>
+        <p class="d">La línea vertical sigue el %C del deslizador. Observa en qué campo cae y qué microestructura
+          resulta al enfriar lentamente.</p>
+        <div class="phase-info" id="phaseInfo"></div>
         <div class="phase-wrap"><canvas id="phase"></canvas></div>
-        <p class="note">Diagrama simplificado con fines didácticos (se omite la región δ). Temperaturas A1 = 727 °C y eutectoide a 0.77 % C.</p>
+        <p class="note">Diagrama simplificado con fines didácticos (se omite la región δ). Temperaturas A1 = 727 °C y
+          eutectoide a 0.77 % C.</p>
       </div>
     </section>
 
     <section id="conclusiones" class="rv">
-      <div class="sec-title"><h2>Interpretación ingenieril</h2></div>
+      <div class="sec-title">
+        <h2>Interpretación ingenieril</h2>
+      </div>
       <div class="card">
         <div class="tabs">
           <button class="tab on" data-p="p1">Limpieza de datos</button>
@@ -123,16 +164,21 @@
           <button class="tab" data-p="p3">Recocido vs normalizado</button>
         </div>
         <div class="pane on" id="p1">
-          <p>Se excluyó el grado <b>SAE 12L14</b> por un error crítico de transcripción en la base original (15 % C), valor físicamente imposible en un acero al carbono que distorsionaba los modelos estadísticos.</p>
+          <p>Se excluyó el grado <b>SAE 12L14</b> por un error crítico de transcripción en la base original (15 % C),
+            valor físicamente imposible en un acero al carbono que distorsionaba los modelos estadísticos.</p>
           <p>Quedaron <b>188 registros válidos</b>.</p>
         </div>
         <div class="pane" id="p2">
-          <p>Existe una correlación lineal positiva entre %C y resistencia (UTS y YS), explicada por el aumento de cementita (Fe₃C) que bloquea el movimiento de dislocaciones.</p>
+          <p>Existe una correlación lineal positiva entre %C y resistencia (UTS y YS), explicada por el aumento de
+            cementita (Fe₃C) que bloquea el movimiento de dislocaciones.</p>
         </div>
         <div class="pane" id="p3">
-          <p>ANOVA mostró que los aceros normalizados son significativamente más resistentes (<b>p = 0.0013</b>). Aunque la muestra recocida tenía más carbono (0.51 % vs 0.37 %), el enfriamiento al aire del normalizado produjo perlita fina, de menor distancia interlaminar y mayor resistencia.</p>
+          <p>ANOVA mostró que los aceros normalizados son significativamente más resistentes (<b>p = 0.0013</b>). Aunque
+            la muestra recocida tenía más carbono (0.51 % vs 0.37 %), el enfriamiento al aire del normalizado produjo
+            perlita fina, de menor distancia interlaminar y mayor resistencia.</p>
         </div>
-        <p class="note">Limitaciones: grupos no balanceados y variables no controladas (aleación, geometría, lote) pueden influir. Los puntos del gráfico son una muestra representativa del análisis completo.</p>
+        <p class="note">Limitaciones: grupos no balanceados y variables no controladas (aleación, geometría, lote)
+          pueden influir. Los puntos del gráfico son una muestra representativa del análisis completo.</p>
       </div>
     </section>
   </main>
@@ -142,4 +188,5 @@
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
 </body>
+
 </html>

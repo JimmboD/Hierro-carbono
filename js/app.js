@@ -101,8 +101,10 @@
   new Chart($('#donut'), {
     type: 'doughnut',
     data: { labels: ['C promedio Recocido', 'C promedio Normalizado'], datasets: [{ data: [K.cRec, K.cNorm], backgroundColor: ['#fb7185', '#34d399'], borderWidth: 0, hoverOffset: 12 }] },
-    options: { responsive: true, maintainAspectRatio: false, cutout: '68%', animation: { animateRotate: true, duration: 1600 },
-      plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 7 } }, tooltip: { ...tip, callbacks: { label: c => ` ${c.parsed}% C` } } } }
+    options: { responsive: true, maintainAspectRatio: false, cutout: '66%', layout: { padding: { top: 16, left: 16, right: 16, bottom: 4 } },
+      animation: { animateRotate: true, duration: 1600 },
+      plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 6, boxHeight: 6, padding: 22, font: { size: 11 } } },
+        tooltip: { ...tip, callbacks: { label: c => ` ${c.parsed}% C` } } } }
   });
 
   /* ---------- Diagrama de fases Fe-Fe3C (esquemático) ---------- */
@@ -151,13 +153,29 @@
     pctx.fillStyle = '#34d399'; pctx.fillText('Eutectoide 0.77 %', X(.77) + 6, Y(727) + 28);
     // marcador del %C
     const cx0 = X(c);
+    pctx.setLineDash([]); pctx.strokeStyle = 'rgba(7,11,20,.85)'; pctx.lineWidth = 6; pctx.beginPath(); pctx.moveTo(cx0, T); pctx.lineTo(cx0, T + ph); pctx.stroke();
     pctx.setLineDash([6, 5]); pctx.strokeStyle = '#34d399'; pctx.lineWidth = 2; pctx.beginPath(); pctx.moveTo(cx0, T); pctx.lineTo(cx0, T + ph); pctx.stroke(); pctx.setLineDash([]);
     const tc = c <= .77 ? a3(c) : acm(c);
     [[tc, '#38bdf8'], [727, '#fb7185']].forEach(([t, col]) => { pctx.beginPath(); pctx.arc(cx0, Y(t), 6, 0, 7); pctx.fillStyle = col; pctx.fill(); pctx.strokeStyle = '#fff'; pctx.lineWidth = 2; pctx.stroke(); });
-    pctx.fillStyle = '#34d399'; pctx.font = '700 12px Inter'; pctx.textAlign = c > 1 ? 'right' : 'left';
-    pctx.fillText(`${c.toFixed(2)} % C · ${c <= .77 ? 'hipo' : 'hiper'}eutectoide`, cx0 + (c > 1 ? -10 : 10), T + 14);
-    pctx.textAlign = c > 1 ? 'right' : 'left';
-    pctx.fillStyle = '#7dd3fc'; pctx.font = '11px Inter'; pctx.fillText(`${c <= .77 ? 'A₃' : 'Acm'} ≈ ${Math.round(tc)} °C`, cx0 + (c > 1 ? -10 : 10), T + 30);
+    pctx.font = '700 12px Inter';
+    const pill = (txt, x, y, col, right) => {
+      const tw = pctx.measureText(txt).width + 18, bx = right ? x - tw : x, by = y - 12;
+      pctx.beginPath(); pctx.roundRect(bx, by, tw, 24, 8);
+      pctx.fillStyle = '#070b14'; pctx.fill(); pctx.strokeStyle = col; pctx.lineWidth = 1.5; pctx.stroke();
+      pctx.fillStyle = col; pctx.textAlign = 'left'; pctx.fillText(txt, bx + 9, y + 4);
+    };
+    const side = c > 0.95, off = side ? -12 : 12;
+    pill(`${c.toFixed(2)} % C`, cx0 + off, T + 18, '#34d399', side);
+    pill(`${c <= .77 ? 'A₃' : 'Acm'} ≈ ${Math.round(tc)} °C`, cx0 + off, Y(tc) - (tc > 1000 ? -22 : 22), '#38bdf8', side);
+    const info = $('#phaseInfo');
+    if (info) {
+      const hipo = c <= .77, per = Math.min(100, c / .77 * 100), fer = 100 - per;
+      info.innerHTML = `<div><span>Carbono</span><b style="color:#34d399">${c.toFixed(2)} %</b></div>
+        <div><span>Tipo de acero</span><b>${hipo ? 'Hipoeutectoide' : 'Hipereutectoide'}</b></div>
+        <div><span>${hipo ? 'A₃ (inicio de ferrita)' : 'Acm (inicio de Fe₃C)'}</span><b style="color:#38bdf8">${Math.round(tc)} °C</b></div>
+        <div><span>A₁ (eutectoide)</span><b style="color:#fb7185">727 °C</b></div>
+        <div><span>Microestructura (lenta)</span><b>${hipo ? `${fer.toFixed(0)}% ferrita + ${per.toFixed(0)}% perlita` : 'Perlita + Fe₃C'}</b></div>`;
+    }
   }
   addEventListener('resize', () => drawPhase(lastC));
 
