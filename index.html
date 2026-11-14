@@ -1,183 +1,125 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Aceros al Carbono</title>
-    <!-- Tailwind CSS para el diseño empresarial oscuro -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js para las visualizaciones -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Tipografía limpia (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #0f172a; /* Slate 900 */
-            color: #f8fafc; 
-        }
-        .card { 
-            background-color: #1e293b; /* Slate 800 */
-            border-radius: 0.75rem; 
-            padding: 1.5rem; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
-            border: 1px solid #334155; 
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Aceros al Carbono</title>
+  <meta name="description" content="Análisis interactivo de propiedades mecánicas de aceros al carbono: %C, UTS, YS y tratamientos térmicos.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 </head>
-<body class="p-4 md:p-8">
-    <div class="max-w-7xl mx-auto space-y-6">
-        <!-- Encabezado -->
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-slate-700 pb-5 gap-4">
-            <div>
-                <h1 class="text-3xl md:text-4xl font-bold text-sky-400 tracking-tight">Propiedades Mecánicas de Aceros al Carbono</h1>
-                <p class="text-slate-400 mt-2 text-sm md:text-base">Análisis del impacto microestructural y térmico</p>
-            </div>
-            <div class="bg-sky-500/10 text-sky-400 px-4 py-2 rounded-full text-sm font-semibold border border-sky-500/20">
-                Proyecto 2
-            </div>
-        </header>
+<body>
+  <canvas id="bg"></canvas>
+  <div class="glow a"></div><div class="glow b"></div>
 
-        <!-- Tarjetas de KPIs -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="card">
-                <h3 class="text-slate-400 text-xs uppercase tracking-wider font-semibold">Registros Válidos</h3>
-                <p class="text-2xl md:text-3xl font-bold text-white mt-2">188</p>
-            </div>
-            <div class="card">
-                <h3 class="text-slate-400 text-xs uppercase tracking-wider font-semibold">Correlación %C vs UTS</h3>
-                <p class="text-2xl md:text-3xl font-bold text-sky-400 mt-2">~ 0.50</p>
-            </div>
-            <div class="card">
-                <h3 class="text-slate-400 text-xs uppercase tracking-wider font-semibold">YS Promedio (Normalizado)</h3>
-                <p class="text-2xl md:text-3xl font-bold text-emerald-400 mt-2">546 MPa</p>
-            </div>
-            <div class="card">
-                <h3 class="text-slate-400 text-xs uppercase tracking-wider font-semibold">YS Promedio (Recocido)</h3>
-                <p class="text-2xl md:text-3xl font-bold text-rose-400 mt-2">476 MPa</p>
-            </div>
+  <nav>
+    <div class="logo"><i></i>Fe–C Analytics</div>
+    <ul>
+      <li><a href="#kpi">Resumen</a></li>
+      <li><a href="#graficos">Gráficos</a></li>
+      <li><a href="#estimador">Estimador</a></li>
+      <li><a href="#conclusiones">Conclusiones</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <span class="badge">Proyecto 2 · Ciencia de Materiales</span>
+      <h1>Propiedades mecánicas de <span>aceros al carbono</span></h1>
+      <p>Explora cómo el contenido de carbono y el tratamiento térmico modifican la resistencia del acero a través de su microestructura.</p>
+    </header>
+
+    <section id="kpi" class="rv">
+      <div class="grid kpis">
+        <div class="card kpi" style="--c:var(--sky)"><h3>Registros válidos</h3><div class="v"><span data-to="188">0</span></div><small class="sub">tras limpieza de datos</small></div>
+        <div class="card kpi" style="--c:var(--indigo)"><h3>Correlación %C vs UTS</h3><div class="v">~ <span data-to="0.50" data-dec="2">0</span></div><small class="sub">positiva, moderada</small></div>
+        <div class="card kpi" style="--c:var(--emerald)"><h3>YS prom. normalizado</h3><div class="v"><span data-to="546">0</span><small>MPa</small></div><small class="sub">enfriamiento al aire</small></div>
+        <div class="card kpi" style="--c:var(--rose)"><h3>YS prom. recocido</h3><div class="v"><span data-to="476">0</span><small>MPa</small></div><small class="sub">enfriamiento en horno</small></div>
+        <div class="card kpi" style="--c:var(--amber)"><h3>ANOVA (valor p)</h3><div class="v"><span data-to="0.0013" data-dec="4">0</span></div><small class="sub">diferencia significativa</small></div>
+      </div>
+    </section>
+
+    <section id="graficos" class="rv">
+      <div class="sec-title"><h2>Exploración interactiva</h2></div>
+      <div class="grid two">
+        <div class="card">
+          <h3 class="t">UTS vs % de carbono</h3>
+          <p class="d">Activa o desactiva procesos y muestra la línea de tendencia. Pasa el cursor sobre los puntos.</p>
+          <div class="chips" id="chips">
+            <label class="toggle"><input type="checkbox" id="fitToggle" checked> Tendencia lineal</label>
+          </div>
+          <div class="chart-box"><canvas id="scatter"></canvas></div>
         </div>
-
-        <!-- Gráficos -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Gráfico de Dispersión -->
-            <div class="card">
-                <h2 class="text-lg font-semibold mb-4 text-slate-200">Relación UTS vs % Carbono</h2>
-                <div class="relative h-64 w-full">
-                    <canvas id="scatterChart"></canvas>
-                </div>
-            </div>
-            <!-- Gráfico de Barras -->
-            <div class="card">
-                <h2 class="text-lg font-semibold mb-4 text-slate-200">Impacto del Tratamiento Térmico (ANOVA)</h2>
-                <div class="relative h-64 w-full">
-                    <canvas id="barChart"></canvas>
-                </div>
-            </div>
+        <div class="card">
+          <h3 class="t">Impacto del tratamiento térmico</h3>
+          <p class="d">Comparación de medias entre recocido y normalizado (ANOVA, p = 0.0013).</p>
+          <div class="chart-box"><canvas id="bars"></canvas></div>
         </div>
-        
-        <!-- Panel de Conclusiones -->
-        <div class="card border-l-4 border-l-sky-500">
-            <h2 class="text-lg font-semibold mb-4 text-sky-400">Interpretación Ingenieril</h2>
-            <ul class="list-disc list-inside space-y-3 text-slate-300 text-sm md:text-base leading-relaxed">
-                <li><strong>Limpieza de datos:</strong> Se excluyó el grado SAE 12L14 debido a un error crítico de transcripción en la base de datos original (15% C), lo cual distorsionaba los modelos estadísticos.</li>
-                <li><strong>Efecto del Carbono:</strong> Existe una correlación lineal positiva entre el %C y la resistencia (UTS y YS), justificada por el aumento volumétrico de cementita ($Fe_3C$) que bloquea el movimiento de dislocaciones.</li>
-                <li><strong>Recocido vs Normalizado:</strong> El análisis ANOVA demostró que los aceros normalizados son significativamente más resistentes (p = 0.0013). Aunque la muestra recocida promediaba más carbono (0.51% vs 0.37%), el enfriamiento rápido al aire del normalizado generó una <em>perlita fina</em>, cuya menor distancia interlaminar ofreció mayor resistencia mecánica.</li>
-            </ul>
+        <div class="card">
+          <h3 class="t">Carbono promedio por tratamiento</h3>
+          <p class="d">El recocido tenía más carbono, pero el normalizado fue más resistente.</p>
+          <div class="chart-box"><canvas id="donut"></canvas></div>
         </div>
-    </div>
+        <div class="card">
+          <h3 class="t">¿Por qué normalizado &gt; recocido?</h3>
+          <p class="d">Efecto de la velocidad de enfriamiento</p>
+          <p style="color:#c3cee0">El enfriamiento más rápido al aire genera <b>perlita fina</b>, con menor distancia interlaminar entre ferrita y cementita (Fe₃C). Menos espacio libre para que las dislocaciones se muevan implica <b>mayor resistencia</b> aunque haya menos carbono.</p>
+          <p style="color:#c3cee0;margin-top:12px">El recocido (enfriamiento en horno) forma perlita gruesa y es más blando y dúctil.</p>
+        </div>
+      </div>
+    </section>
 
-    <script>
-        // Configuración global del tema oscuro para Chart.js
-        Chart.defaults.color = '#94a3b8';
-        Chart.defaults.borderColor = '#334155';
-        Chart.defaults.font.family = "'Inter', sans-serif";
+    <section id="estimador" class="rv">
+      <div class="sec-title"><h2>Propuesta propia · Estimador de UTS</h2></div>
+      <div class="card est">
+        <div class="ctrl">
+          <label>Tratamiento / proceso</label>
+          <select id="proc"></select>
+          <label>Contenido de carbono <b id="cv"></b></label>
+          <input type="range" id="carb" min="0.05" max="1" step="0.01" value="0.4">
+          <p class="mat" id="mat"></p>
+          <p class="note" id="estNote"></p>
+        </div>
+        <div class="result">
+          <div class="gauge">
+            <svg width="220" height="220" viewBox="0 0 220 220">
+              <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#34d399"/></linearGradient></defs>
+              <circle class="bgc" cx="110" cy="110" r="90"/><circle class="fg" cx="110" cy="110" r="90"/>
+            </svg>
+            <div class="num"><b id="utsOut">0</b><span>MPa · UTS estimado</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        // Muestra representativa extraída del análisis en Python
-        const scatterData = {
-            datasets: [{
-                label: 'Recocido',
-                data: [{x: 0.1, y: 400}, {x: 0.2, y: 450}, {x: 0.4, y: 650}, {x: 0.5, y: 710}, {x: 0.8, y: 800}],
-                backgroundColor: '#fb7185', // Rose 400
-                pointRadius: 5,
-                pointHoverRadius: 7
-            }, {
-                label: 'Normalizado',
-                data: [{x: 0.1, y: 480}, {x: 0.2, y: 560}, {x: 0.35, y: 690}, {x: 0.4, y: 820}, {x: 0.55, y: 860}],
-                backgroundColor: '#34d399', // Emerald 400
-                pointRadius: 5,
-                pointHoverRadius: 7
-            }, {
-                label: 'Laminado en Caliente',
-                data: [{x: 0.15, y: 410}, {x: 0.25, y: 510}, {x: 0.45, y: 610}, {x: 0.6, y: 760}, {x: 0.9, y: 890}],
-                backgroundColor: '#38bdf8', // Sky 400
-                pointRadius: 5,
-                pointHoverRadius: 7
-            }]
-        };
+    <section id="conclusiones" class="rv">
+      <div class="sec-title"><h2>Interpretación ingenieril</h2></div>
+      <div class="card">
+        <div class="tabs">
+          <button class="tab on" data-p="p1">Limpieza de datos</button>
+          <button class="tab" data-p="p2">Efecto del carbono</button>
+          <button class="tab" data-p="p3">Recocido vs normalizado</button>
+        </div>
+        <div class="pane on" id="p1">
+          <p>Se excluyó el grado <b>SAE 12L14</b> por un error crítico de transcripción en la base original (15 % C), valor físicamente imposible en un acero al carbono que distorsionaba los modelos estadísticos.</p>
+          <p>Quedaron <b>188 registros válidos</b>.</p>
+        </div>
+        <div class="pane" id="p2">
+          <p>Existe una correlación lineal positiva entre %C y resistencia (UTS y YS), explicada por el aumento de cementita (Fe₃C) que bloquea el movimiento de dislocaciones.</p>
+        </div>
+        <div class="pane" id="p3">
+          <p>ANOVA mostró que los aceros normalizados son significativamente más resistentes (<b>p = 0.0013</b>). Aunque la muestra recocida tenía más carbono (0.51 % vs 0.37 %), el enfriamiento al aire del normalizado produjo perlita fina, de menor distancia interlaminar y mayor resistencia.</p>
+        </div>
+        <p class="note">Limitaciones: grupos no balanceados y variables no controladas (aleación, geometría, lote) pueden influir. Los puntos del gráfico son una muestra representativa del análisis completo.</p>
+      </div>
+    </section>
+  </main>
 
-        const scatterConfig = {
-            type: 'scatter',
-            data: scatterData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { 
-                    legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 6 } } 
-                },
-                scales: {
-                    x: { 
-                        title: { display: true, text: 'Contenido de Carbono (%)', color: '#94a3b8' },
-                        grid: { color: '#1e293b' }
-                    },
-                    y: { 
-                        title: { display: true, text: 'Esfuerzo Máximo UTS (MPa)', color: '#94a3b8' },
-                        grid: { color: '#1e293b' }
-                    }
-                }
-            }
-        };
-        new Chart(document.getElementById('scatterChart'), scatterConfig);
+  <footer>Proyecto 2 · Análisis de aceros al carbono · Sitio estático para GitHub Pages</footer>
 
-        const barData = {
-            labels: ['Recocido (Enfriamiento en Horno)', 'Normalizado (Enfriamiento al Aire)'],
-            datasets: [
-                {
-                    label: 'UTS Promedio (MPa)',
-                    data: [653, 788],
-                    backgroundColor: '#38bdf8',
-                    borderRadius: 6
-                },
-                {
-                    label: 'YS Promedio (MPa)',
-                    data: [476, 546],
-                    backgroundColor: '#818cf8',
-                    borderRadius: 6
-                }
-            ]
-        };
-
-        const barConfig = {
-            type: 'bar',
-            data: barData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { 
-                    legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 6 } } 
-                },
-                scales: {
-                    y: { 
-                        title: { display: true, text: 'Esfuerzo (MPa)', color: '#94a3b8' },
-                        grid: { color: '#1e293b' }
-                    },
-                    x: {
-                        grid: { display: false }
-                    }
-                }
-            }
-        };
-        new Chart(document.getElementById('barChart'), barConfig);
-    </script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
