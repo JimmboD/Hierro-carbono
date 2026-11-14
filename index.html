@@ -26,7 +26,7 @@
 
   <main>
     <header class="hero">
-      <span class="badge">Proyecto 2 · Ciencia de Materiales</span>
+      <span class="badge">Proyecto 2 · Ingeniería de Materiales</span>
       <h1>Propiedades mecánicas de <span>aceros al carbono</span></h1>
       <p>Explora cómo el contenido de carbono y el tratamiento térmico modifican la resistencia del acero a través de su microestructura.</p>
     </header>
@@ -45,11 +45,18 @@
       <div class="sec-title"><h2>Exploración interactiva</h2></div>
       <div class="grid two">
         <div class="card">
-          <h3 class="t">UTS vs % de carbono</h3>
-          <p class="d">Activa o desactiva procesos y muestra la línea de tendencia. Pasa el cursor sobre los puntos.</p>
-          <div class="chips" id="chips">
-            <label class="toggle"><input type="checkbox" id="fitToggle" checked> Tendencia lineal</label>
+          <div class="card-head">
+            <div>
+              <h3 class="t">UTS vs % de carbono</h3>
+              <p class="d">Filtra por proceso y pasa el cursor sobre los puntos.</p>
+            </div>
+            <label class="switch" title="Mostrar línea de tendencia lineal">
+              <input type="checkbox" id="fitToggle" checked>
+              <span class="track"><span class="knob"></span></span>
+              <span class="lbl">Tendencia lineal</span>
+            </label>
           </div>
+          <div class="chips" id="chips"></div>
           <div class="chart-box"><canvas id="scatter"></canvas></div>
         </div>
         <div class="card">
@@ -67,6 +74,12 @@
           <p class="d">Efecto de la velocidad de enfriamiento</p>
           <p style="color:#c3cee0">El enfriamiento más rápido al aire genera <b>perlita fina</b>, con menor distancia interlaminar entre ferrita y cementita (Fe₃C). Menos espacio libre para que las dislocaciones se muevan implica <b>mayor resistencia</b> aunque haya menos carbono.</p>
           <p style="color:#c3cee0;margin-top:12px">El recocido (enfriamiento en horno) forma perlita gruesa y es más blando y dúctil.</p>
+          <p style="color:#c3cee0;margin-top:12px">Esto se explica con la relación de Hall-Petch: las láminas de cementita actúan como barreras para las dislocaciones, y cuanto más finas y cercanas están, más energía se necesita para deformar el material. Además, al enfriar más rápido la transformación ocurre a menor temperatura, lo que refina la estructura.</p>
+          <ul class="mini">
+            <li><b>Recocido:</b> enfriamiento lento en horno → perlita gruesa → menor UTS y YS, mayor ductilidad.</li>
+            <li><b>Normalizado:</b> enfriamiento al aire → perlita fina → mayor UTS y YS.</li>
+            <li><b>Lección:</b> el tratamiento térmico puede pesar más que una pequeña diferencia de %C.</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -78,7 +91,8 @@
           <label>Tratamiento / proceso</label>
           <select id="proc"></select>
           <label>Contenido de carbono <b id="cv"></b></label>
-          <input type="range" id="carb" min="0.05" max="1" step="0.01" value="0.4">
+          <input type="range" id="carb" class="slider" min="0.05" max="1" step="0.01" value="0.4">
+          <div class="ticks"><span>0.05</span><span>0.25</span><span>0.5</span><span>0.77 (eutectoide)</span><span>1.0</span></div>
           <p class="mat" id="mat"></p>
           <p class="note" id="estNote"></p>
         </div>
@@ -91,6 +105,12 @@
             <div class="num"><b id="utsOut">0</b><span>MPa · UTS estimado</span></div>
           </div>
         </div>
+      </div>
+      <div class="card" style="margin-top:18px">
+        <h3 class="t">Diagrama de fases Fe–Fe₃C (esquemático)</h3>
+        <p class="d">La línea vertical sigue el %C del deslizador. Observa en qué campo cae y qué microestructura resulta al enfriar lentamente.</p>
+        <div class="phase-wrap"><canvas id="phase"></canvas></div>
+        <p class="note">Diagrama simplificado con fines didácticos (se omite la región δ). Temperaturas A1 = 727 °C y eutectoide a 0.77 % C.</p>
       </div>
     </section>
 

@@ -105,6 +105,62 @@
       plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 7 } }, tooltip: { ...tip, callbacks: { label: c => ` ${c.parsed}% C` } } } }
   });
 
+  /* ---------- Diagrama de fases Fe-Fe3C (esquemático) ---------- */
+  const pc = $('#phase'), pctx = pc.getContext('2d');
+  const XMAX = 1.4, TMIN = 400, TMAX = 1600;
+  let lastC = 0.4;
+  function drawPhase(c) {
+    lastC = c;
+    const dpr = devicePixelRatio || 1, w = pc.clientWidth, h = pc.clientHeight;
+    if (!w) return;
+    pc.width = w * dpr; pc.height = h * dpr; pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const L = 62, R = 16, T = 16, B = 46, pw = w - L - R, ph = h - T - B;
+    const X = x => L + x / XMAX * pw, Y = t => T + (TMAX - t) / (TMAX - TMIN) * ph;
+    const poly = (pts, fill) => { pctx.beginPath(); pts.forEach(([x, t], i) => i ? pctx.lineTo(X(x), Y(t)) : pctx.moveTo(X(x), Y(t))); pctx.closePath(); pctx.fillStyle = fill; pctx.fill(); };
+    const line = (pts, col, wd = 2, dash = []) => { pctx.beginPath(); pctx.setLineDash(dash); pts.forEach(([x, t], i) => i ? pctx.lineTo(X(x), Y(t)) : pctx.moveTo(X(x), Y(t))); pctx.strokeStyle = col; pctx.lineWidth = wd; pctx.stroke(); pctx.setLineDash([]); };
+    const acm = x => 727 + (x - 0.77) / (2.14 - 0.77) * (1147 - 727);
+    const a3 = x => 912 - x / 0.77 * (912 - 727);
+    const sol = x => x < .09 ? 1538 - x / .09 * 45 : x < .17 ? 1493 : 1493 - (x - .17) / (2.14 - .17) * 346;
+    const liq = x => x < .53 ? 1538 - x / .53 * 45 : 1493 - (x - .53) / (4.3 - .53) * 346;
+    const N = 40, xs = Array.from({ length: N + 1 }, (_, i) => i / N * XMAX);
+    // regiones
+    poly([[0, TMIN], [XMAX, TMIN], [XMAX, 727], [0, 727]], 'rgba(251,113,133,.10)');
+    poly([[0, 727], [.77, 727], [0, 912]], 'rgba(129,140,248,.14)');
+    poly([[0, 912], [.77, 727], [XMAX, acm(XMAX)], ...xs.slice().reverse().map(x => [x, sol(x)])], 'rgba(56,189,248,.12)');
+    poly([...xs.map(x => [x, sol(x)]), ...xs.slice().reverse().map(x => [x, liq(x)])], 'rgba(251,191,36,.12)');
+    poly([...xs.map(x => [x, liq(x)]), [XMAX, TMAX], [0, TMAX]], 'rgba(251,191,36,.05)');
+    // rejilla y ejes
+    pctx.font = '12px Inter'; pctx.fillStyle = '#8b9bb4'; pctx.strokeStyle = 'rgba(148,163,184,.12)'; pctx.lineWidth = 1; pctx.setLineDash([]);
+    for (let t = 400; t <= 1600; t += 200) { pctx.beginPath(); pctx.moveTo(L, Y(t)); pctx.lineTo(L + pw, Y(t)); pctx.stroke(); pctx.textAlign = 'right'; pctx.fillText(t, L - 8, Y(t) + 4); }
+    for (let x = 0; x <= 1.4001; x += .2) { pctx.textAlign = 'center'; pctx.fillText(x.toFixed(1), X(x), T + ph + 18); }
+    pctx.fillText('Carbono (% en peso)', L + pw / 2, h - 8);
+    pctx.save(); pctx.translate(14, T + ph / 2); pctx.rotate(-Math.PI / 2); pctx.fillText('Temperatura (°C)', 0, 0); pctx.restore();
+    // líneas de transformación
+    line([[0, 912], [.77, 727], [XMAX, acm(XMAX)]], '#38bdf8', 2.2);
+    line([[0, 727], [XMAX, 727]], '#fb7185', 2.2);
+    line(xs.map(x => [x, sol(x)]), '#fbbf24', 2); line(xs.map(x => [x, liq(x)]), '#fbbf24', 2);
+    // etiquetas
+    pctx.textAlign = 'center'; pctx.font = '600 12px Inter';
+    const lab = (t, x, y, col = '#c3cee0') => { pctx.fillStyle = col; pctx.fillText(t, X(x), Y(y)); };
+    lab('Austenita (γ)', .9, 1000, '#7dd3fc'); lab('α + γ', .15, 800, '#a5b4fc');
+    lab('Ferrita + Perlita', .3, 560); lab('Perlita + Fe₃C', 1.1, 560); lab('γ + Fe₃C', 1.15, 800, '#7dd3fc');
+    lab('Líquido', .7, 1560, '#fcd34d'); lab('L + γ', 1.05, 1440, '#fcd34d');
+    pctx.font = '11px Inter'; pctx.textAlign = 'left';
+    pctx.fillStyle = '#38bdf8'; pctx.fillText('A₃', X(.12), Y(870) - 4); pctx.fillText('Acm', X(1.0), Y(acm(1.0)) - 8);
+    pctx.fillStyle = '#fb7185'; pctx.fillText('A₁ = 727 °C', X(1.03), Y(727) + 15);
+    pctx.fillStyle = '#34d399'; pctx.fillText('Eutectoide 0.77 %', X(.77) + 6, Y(727) + 28);
+    // marcador del %C
+    const cx0 = X(c);
+    pctx.setLineDash([6, 5]); pctx.strokeStyle = '#34d399'; pctx.lineWidth = 2; pctx.beginPath(); pctx.moveTo(cx0, T); pctx.lineTo(cx0, T + ph); pctx.stroke(); pctx.setLineDash([]);
+    const tc = c <= .77 ? a3(c) : acm(c);
+    [[tc, '#38bdf8'], [727, '#fb7185']].forEach(([t, col]) => { pctx.beginPath(); pctx.arc(cx0, Y(t), 6, 0, 7); pctx.fillStyle = col; pctx.fill(); pctx.strokeStyle = '#fff'; pctx.lineWidth = 2; pctx.stroke(); });
+    pctx.fillStyle = '#34d399'; pctx.font = '700 12px Inter'; pctx.textAlign = c > 1 ? 'right' : 'left';
+    pctx.fillText(`${c.toFixed(2)} % C · ${c <= .77 ? 'hipo' : 'hiper'}eutectoide`, cx0 + (c > 1 ? -10 : 10), T + 14);
+    pctx.textAlign = c > 1 ? 'right' : 'left';
+    pctx.fillStyle = '#7dd3fc'; pctx.font = '11px Inter'; pctx.fillText(`${c <= .77 ? 'A₃' : 'Acm'} ≈ ${Math.round(tc)} °C`, cx0 + (c > 1 ? -10 : 10), T + 30);
+  }
+  addEventListener('resize', () => drawPhase(lastC));
+
   /* ---------- Estimador interactivo ---------- */
   const sel = $('#proc'), rng = $('#carb');
   Object.keys(D.procesos).forEach(n => sel.add(new Option(n, n)));
@@ -114,6 +170,8 @@
   function est() {
     const c = +rng.value, f = fits[sel.value], uts = Math.round(f.m * c + f.b);
     $('#cv').textContent = c.toFixed(2) + ' %';
+    rng.style.setProperty('--p', ((c - rng.min) / (rng.max - rng.min) * 100) + '%');
+    drawPhase(c);
     $('#utsOut').textContent = uts;
     fg.style.strokeDashoffset = C * (1 - Math.min(uts / 1000, 1));
     const fer = Math.max(0, Math.min(100, 100 - c / 0.77 * 100)), per = 100 - fer;
